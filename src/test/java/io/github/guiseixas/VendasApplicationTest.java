@@ -1,4 +1,4 @@
-package org.example;
+package io.github.guiseixas;
 
 import static org.junit.Assert.assertTrue;
 
