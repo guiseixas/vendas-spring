@@ -1,6 +1,7 @@
 package io.github.guiseixas.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -12,6 +13,9 @@ public class Cliente {
     private Integer id;
     @Column(length = 100)
     private String nome;
+
+    @Column(length = 11)
+    private String cpf;
 
     @JsonIgnore
     @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
@@ -39,6 +43,14 @@ public class Cliente {
 
     public void setPedidos(Set<Pedido> pedidos) {
         this.pedidos = pedidos;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     @Override
