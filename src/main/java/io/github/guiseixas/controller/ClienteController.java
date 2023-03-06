@@ -5,14 +5,16 @@ import io.github.guiseixas.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping("/api/clientes")
 public class ClienteController {
 
@@ -20,62 +22,53 @@ public class ClienteController {
     private ClienteRepository clienteRepository;
 
     @GetMapping
-    @ResponseBody
-    public ResponseEntity<?> getClientes(Cliente cliente) {
+    public List<Cliente> getAll(Cliente cliente) {
         ExampleMatcher matcher = ExampleMatcher
                                     .matching()
                                     .withIgnoreCase()
                                     .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 
         Example example = Example.of(cliente, matcher);
-        List<Cliente> clientes = clienteRepository.findAll(example);
-
-        return ResponseEntity.ok(clientes);
+        return clienteRepository.findAll(example);
     }
 
     @GetMapping("/{id}")
-    @ResponseBody
-    public ResponseEntity<?> getClienteById(@PathVariable("id") Integer id){
-        Optional<Cliente> cliente  = clienteRepository.findById(id);
-        if(cliente.isPresent()){
-            return ResponseEntity.ok(cliente.get());
-        }
-
-        return ResponseEntity.notFound().build();
+    public Cliente getById(@PathVariable("id") Integer id){
+        return clienteRepository
+                .findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping
-    @ResponseBody
-    public ResponseEntity<?> saveCliente(@RequestBody Cliente cliente) {
-        Cliente clienteSalvo = clienteRepository.save(cliente);
-        return ResponseEntity.ok(clienteSalvo);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Cliente save(@RequestBody Cliente cliente) {
+        return clienteRepository.save(cliente);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseBody
-    public ResponseEntity<?> deleteCliente(@PathVariable("id") Integer id) {
-        Optional<Cliente> cliente  = clienteRepository.findById(id);
-        if(cliente.isPresent()){
-            clienteRepository.delete(cliente.get());
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.notFound().build();
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable("id") Integer id) {
+        clienteRepository
+                .findById(id)
+                .map(cliente -> {
+                    clienteRepository.delete(cliente);
+                    return cliente;
+                })
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @PutMapping("/{id}")
-    @ResponseBody
-    public ResponseEntity<?> updateCliente(@PathVariable("id") Integer id,
-                                           @RequestBody Cliente cliente) {
-        Optional<Cliente> c  = clienteRepository.findById(id);
-        if(c.isPresent()){
-            c.get().setNome(cliente.getNome());
-            c.get().setCpf(cliente.getCpf());
-            Cliente clienteSalvo = clienteRepository.save(c.get());
-            return ResponseEntity.ok(clienteSalvo);
-        }
-
-        return ResponseEntity.notFound().build();
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@PathVariable("id") Integer id,
+                                    @RequestBody Cliente cliente) {
+        clienteRepository
+                .findById(id)
+                .map(clienteExists -> {
+                    cliente.setId(clienteExists.getId());
+                    clienteRepository.save(cliente);
+                    return clienteExists;
+                })
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
 }
