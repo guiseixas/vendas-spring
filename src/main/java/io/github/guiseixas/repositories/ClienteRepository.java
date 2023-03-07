@@ -1,4 +1,4 @@
-package io.github.guiseixas.repository;
+package io.github.guiseixas.repositories;
 
 import io.github.guiseixas.entity.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
