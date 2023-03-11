@@ -1,5 +1,6 @@
 package io.github.guiseixas.entity;
 
+import io.github.guiseixas.services.dtos.PedidoDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,5 +35,13 @@ public class Pedido {
 
     public List<ItemPedido> getItensPedidos() {
         return itensPedidos;
+    }
+
+    public static Pedido dtoToEntity(PedidoDTO pedidoDTO){
+        Pedido pedido = new Pedido();
+        pedido.setDataPedido(LocalDate.now());
+        pedido.setTotal(pedidoDTO.getTotal());
+
+        return pedido;
     }
 }

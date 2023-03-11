@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 @NoArgsConstructor
 public class ItemPedidoDTO {
 
-    private Integer produto;
+    private Integer id_produto;
 
     private Integer quantidade;
 }

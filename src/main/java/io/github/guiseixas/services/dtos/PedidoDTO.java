@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class PedidoDTO {
 
-    private Integer cliente;
+    private Integer id_cliente;
 
     private BigDecimal total;
 
