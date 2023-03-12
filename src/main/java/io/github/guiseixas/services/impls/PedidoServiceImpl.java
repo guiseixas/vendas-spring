@@ -43,14 +43,14 @@ public class PedidoServiceImpl implements PedidoService {
                         .findById(pedido.getId())
                         .orElseThrow(() -> new RegraNegocioException("Código do cliente inválido."))
         );
-        List<ItemPedido> itensPedidos = convertItensDtoToList(pedido, pedidoDTO.getItens());
+        List<ItemPedido> itensPedidos = convertItensDtoToListPedidos(pedido, pedidoDTO.getItens());
         itemPedidoRepository.saveAll(itensPedidos);
         pedido.setItensPedidos(itensPedidos);
         pedidoRepository.save(pedido);
         return pedido;
     }
 
-    private List<ItemPedido> convertItensDtoToList(Pedido pedido, List<ItemPedidoDTO> itens) {
+    private List<ItemPedido> convertItensDtoToListPedidos(Pedido pedido, List<ItemPedidoDTO> itens) {
         if(itens.isEmpty()){
             throw new RegraNegocioException("Não é possível realizar um pedido sem itens.");
         }
