@@ -9,8 +9,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Data
-@RequiredArgsConstructor
-@NoArgsConstructor
 public class PedidoDTO {
 
     private Integer id_cliente;

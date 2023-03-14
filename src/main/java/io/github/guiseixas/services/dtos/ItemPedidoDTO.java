@@ -5,8 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
-@NoArgsConstructor
 public class ItemPedidoDTO {
 
     private Integer id_produto;

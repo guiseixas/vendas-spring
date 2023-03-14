@@ -1,19 +1,17 @@
 package io.github.guiseixas.entity;
 
 import io.github.guiseixas.services.dtos.PedidoDTO;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Entity
 public class Pedido {
 
     @Id
@@ -21,7 +19,7 @@ public class Pedido {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "cliente_id")
+    @JoinColumn(name = "cliente")
     private Cliente cliente;
 
     @Column(name = "data_pedido")
@@ -32,16 +30,4 @@ public class Pedido {
 
     @OneToMany(mappedBy = "pedido")
     private List<ItemPedido> itensPedidos;
-
-    public List<ItemPedido> getItensPedidos() {
-        return itensPedidos;
-    }
-
-    public static Pedido dtoToEntity(PedidoDTO pedidoDTO){
-        Pedido pedido = new Pedido();
-        pedido.setDataPedido(LocalDate.now());
-        pedido.setTotal(pedidoDTO.getTotal());
-
-        return pedido;
-    }
 }
